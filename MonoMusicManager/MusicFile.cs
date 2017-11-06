@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 namespace MonoMusicManager
 {
@@ -69,6 +70,11 @@ namespace MonoMusicManager
             HasVariousArtists = false;
             MaxDiscNr = 0;
             MaxTrackNr = 0;
+        }
+
+        public override string ToString()
+        {
+            return FormatDiscNr() + FormatTrackNr() + " - " + Artist + " - " + Title + " (from '" + Album + "', Genre: " + Genre + ") File: " + Source + " Sorted into: "+MusicFolder.GetFolderName(Folder);
         }
 
         public string CopyToDestination(string targetFolder, bool overide)
@@ -235,6 +241,51 @@ namespace MonoMusicManager
             }
 
             return names;
+        }
+
+        public static List<MusicFile> ReadMusicFiles(string targetPath, DragEventArgs dragEvent)
+        {
+            return ReadMusicFiles(targetPath, dragEvent.Data.GetData(DataFormats.FileDrop) as string[]);
+        }
+
+        public static List<MusicFile> ReadMusicFiles(string targetPath, params string[] filePaths)
+        {
+            //Console.WriteLine(filePaths);
+
+            List<MusicFile> musicFiles = new List<MusicFile>();
+
+            foreach(string path in filePaths)
+            {
+                FileAttributes attr = File.GetAttributes(path);
+                if(attr.HasFlag(FileAttributes.Directory))
+                {
+                    DirectoryInfo info = new DirectoryInfo(path);
+                    foreach(FileInfo file in info.EnumerateFiles())
+                    {
+                        CheckPath(file.FullName, musicFiles);
+                    }
+                }
+                else
+                {
+                    CheckPath(path, musicFiles);
+                }
+            }
+            
+            return SortFiles(targetPath, musicFiles.ToArray());
+        }
+
+        private static void CheckPath(string filePath, List<MusicFile> otherMusicFiles)
+        {
+            FileInfo info = new FileInfo(filePath);
+            if (info.Exists && CheckExtension(info.Extension))
+            {
+                otherMusicFiles.Add(new MusicFile(filePath));
+            }
+        } 
+
+        private static bool CheckExtension(string extension)
+        {
+            return extension.Equals(".mp3") || extension.Equals(".ogg");
         }
 
         public static List<MusicFile> SortFiles(string targetFolder, params MusicFile[] unsortedFiles)
