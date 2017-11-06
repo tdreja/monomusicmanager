@@ -71,6 +71,26 @@ namespace MonoMusicManager
             MaxTrackNr = 0;
         }
 
+        public string CopyToDestination(string targetFolder, bool overide)
+        {
+            if(CanCopy())
+            {
+                FileInfo dest = new FileInfo(GetDestination(targetFolder));
+                if(!dest.Directory.Exists)
+                {
+                    Directory.CreateDirectory(dest.Directory.FullName);
+                }
+                File.Copy(Source, dest.FullName, overide);
+
+                return dest.FullName;
+            }
+            else
+            {
+                return Source;
+            }
+            
+        }
+
         public string GetDestination(string targetFolder)
         {
             FileInfo sourceFile = new FileInfo(Source);
@@ -97,7 +117,7 @@ namespace MonoMusicManager
 
         public bool IsValid()
         {
-            return Title != null && Title.Length > 0 && Artist != null && Artist.Length > 0;
+            return Source != null && Title != null && Title.Length > 0 && Artist != null && Artist.Length > 0;
         }
 
         public bool CanCopy()
@@ -247,47 +267,50 @@ namespace MonoMusicManager
 
             foreach(MusicFile file in unsortedFiles)
             {
-                if(file.Album != null)
+                if(file.IsValid())
                 {
-                    if(albumInfos.ContainsKey(file.Album))
+                    if (file.Album != null)
                     {
-                        file.HasVariousArtists = albumInfos[file.Album].IsVarious;
-                        file.MaxDiscNr = albumInfos[file.Album].MaxDisc;
-                        file.MaxTrackNr = albumInfos[file.Album].MaxTrack;
-                    }
-
-                    if(albumInfos.ContainsKey(file.Album) && albumInfos[file.Album].SongCount >= MINIMUM_ALBUM_SONG_NUMBER)
-                    {
-                        if(file.Genre != null && file.Genre.Contains("Soundtrack"))
+                        if (albumInfos.ContainsKey(file.Album))
                         {
-                            file.Folder = Folders.FILMMUSIK;
-                        }
-                         else
-                        {
-                            file.Folder = Folders.ALBUM;
+                            file.HasVariousArtists = albumInfos[file.Album].IsVarious;
+                            file.MaxDiscNr = albumInfos[file.Album].MaxDisc;
+                            file.MaxTrackNr = albumInfos[file.Album].MaxTrack;
                         }
 
-                        if(parentFolder.ContainsKey(file.Album))
+                        if (albumInfos.ContainsKey(file.Album) && albumInfos[file.Album].SongCount >= MINIMUM_ALBUM_SONG_NUMBER)
                         {
-                            file.AlbumParentFolder = parentFolder[file.Album];
+                            if (file.Genre != null && file.Genre.Contains("Soundtrack"))
+                            {
+                                file.Folder = Folders.FILMMUSIK;
+                            }
+                            else
+                            {
+                                file.Folder = Folders.ALBUM;
+                            }
+
+                            if (parentFolder.ContainsKey(file.Album))
+                            {
+                                file.AlbumParentFolder = parentFolder[file.Album];
+                            }
+                            else
+                            {
+                                file.AlbumParentFolder = CheckParentFolder(albumInfos[file.Album].Artist, file.HasVariousArtists, file.Album, file.Folder, targetFolder);
+                                parentFolder.Add(file.Album, file.AlbumParentFolder);
+                            }
                         }
                         else
                         {
-                            file.AlbumParentFolder = CheckParentFolder(albumInfos[file.Album].Artist, file.HasVariousArtists, file.Album, file.Folder, targetFolder);
-                            parentFolder.Add(file.Album, file.AlbumParentFolder);
+                            file.Folder = Folders.LIEDER;
                         }
                     }
                     else
                     {
                         file.Folder = Folders.LIEDER;
                     }
-                }
-                else
-                {
-                    file.Folder = Folders.LIEDER;
-                }
-                
-                sortedFiles.Add(file);
+
+                    sortedFiles.Add(file);
+                }                
             }
 
             return sortedFiles;
