@@ -204,10 +204,10 @@ namespace MonoMusicManager
 
         public static string GetPath(string basePath, Folders folder)
         {
-            return Path.Combine(basePath, GetPathFor(folder));
+            return Path.Combine(basePath, GetFolderName(folder));
         }
 
-        private static string GetPathFor(Folders folder)
+        public static string GetFolderName(Folders folder)
         {
             switch(folder)
             {
@@ -224,6 +224,17 @@ namespace MonoMusicManager
                 default:
                     return "NoFolder";
             }
+        }
+
+        public static List<string> GetAllFolderNames()
+        {
+            List<string> names = new List<string>();
+
+            foreach (Folders fold in Enum.GetValues(typeof(Folders))) {
+                names.Add(GetFolderName(fold));
+            }
+
+            return names;
         }
 
         public static List<MusicFile> SortFiles(string targetFolder, params MusicFile[] unsortedFiles)
