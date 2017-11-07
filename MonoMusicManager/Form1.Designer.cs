@@ -1,6 +1,8 @@
-﻿namespace MonoMusicManager
+﻿using System.Collections.Generic;
+
+namespace MonoMusicManager
 {
-    partial class Form1
+    partial class MainWindow
     {
         /// <summary>
         /// Erforderliche Designervariable.
@@ -28,36 +30,88 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.musicFileList = new System.Windows.Forms.ListView();
+            this.fileHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.titleHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.artistHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.discHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.trackHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.folderHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
-            // listView1
+            // musicFileList
             // 
-            this.listView1.AllowDrop = true;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.Location = new System.Drawing.Point(0, 0);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(282, 253);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnMusicItemDrop);
-            this.listView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnMusicItemDrag);
+            this.musicFileList.AllowDrop = true;
+            this.musicFileList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.fileHeader,
+            this.titleHeader,
+            this.artistHeader,
+            this.discHeader,
+            this.trackHeader,
+            this.folderHeader});
+            this.musicFileList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.musicFileList.GridLines = true;
+            this.musicFileList.HoverSelection = true;
+            this.musicFileList.LabelEdit = true;
+            this.musicFileList.Location = new System.Drawing.Point(0, 0);
+            this.musicFileList.MaximumSize = new System.Drawing.Size(782, 533);
+            this.musicFileList.Name = "musicFileList";
+            this.musicFileList.Size = new System.Drawing.Size(782, 533);
+            this.musicFileList.TabIndex = 0;
+            this.musicFileList.UseCompatibleStateImageBehavior = false;
+            this.musicFileList.View = System.Windows.Forms.View.Details;
+            this.musicFileList.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnMusicItemDrop);
+            this.musicFileList.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnMusicItemDrag);
             // 
-            // Form1
+            // fileHeader
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 253);
-            this.Controls.Add(this.listView1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.fileHeader.Text = "File";
+            this.fileHeader.Width = 34;
+            // 
+            // titleHeader
+            // 
+            this.titleHeader.Text = "Title";
+            this.titleHeader.Width = 38;
+            // 
+            // artistHeader
+            // 
+            this.artistHeader.Text = "Artist";
+            this.artistHeader.Width = 41;
+            // 
+            // discHeader
+            // 
+            this.discHeader.Text = "Disc";
+            // 
+            // trackHeader
+            // 
+            this.trackHeader.Text = "Track";
+            // 
+            // folderHeader
+            // 
+            this.folderHeader.Text = "Folder";
+            this.folderHeader.Width = 485;
+            // 
+            // MainWindow
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(782, 553);
+            this.Controls.Add(this.musicFileList);
+            this.MaximumSize = new System.Drawing.Size(800, 600);
+            this.Name = "MainWindow";
+            this.Text = "Music Manager V5";
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader fileHeader;
+        private System.Windows.Forms.ColumnHeader titleHeader;
+        private System.Windows.Forms.ColumnHeader artistHeader;
+        private System.Windows.Forms.ColumnHeader folderHeader;
+        private System.Windows.Forms.ColumnHeader discHeader;
+        private System.Windows.Forms.ColumnHeader trackHeader;
+        internal System.Windows.Forms.ListView musicFileList;
     }
 }
 

@@ -15,11 +15,13 @@ namespace MonoMusicManager
         [STAThread]
         static void Main()
         {
+            //Console.WriteLine("Oh Meine Fresse");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new MainWindow());
 
-            string musicFolder = "C:\\Users\\thoma\\Downloads\\etc";
+            /*string musicFolder = "C:\\Users\\thoma\\Downloads\\etc";
             string prefix = Path.Combine(musicFolder, "Apocalyptica - Worlds Collide");
             //string prefix = "F:\\Downloads\\Musik\\Solaris";
 
@@ -35,9 +37,9 @@ namespace MonoMusicManager
                 Console.WriteLine("Copy " + tmp.CopyToDestination("E:\\Sonstiges", true));
             }*/
 
-            Playlist pls = new Playlist();
+            /*Playlist pls = new Playlist();
             pls.AddSong(sorted[0].CopyToDestination("E:\\Sonstiges", true));
-            Console.WriteLine(pls.CreateXML());
+            Console.WriteLine(pls.CreateXML());*/
 
             //Console.WriteLine(pls.PrintSong("E:\\Album\\Sonstiges\\WasWeisIch\\Hallo\\Welt"));
         }

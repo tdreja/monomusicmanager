@@ -106,7 +106,7 @@ namespace MonoMusicManager
             if (Folder == MusicFolder.Folders.ALBUM || Folder == MusicFolder.Folders.FILMMUSIK 
                 || Folder == MusicFolder.Folders.PODCASTS || Folder == MusicFolder.Folders.LIEDER)
             {
-                if (AlbumParentFolder != null && AlbumParentFolder.Length > 0)
+                if (HasParent())
                 {
                     newPath = Path.Combine(newPath, AlbumParentFolder);
                 }
@@ -191,6 +191,11 @@ namespace MonoMusicManager
             {
                 return disc.ToString("0");
             }
+        }
+
+        public bool HasParent()
+        {
+            return AlbumParentFolder != null && AlbumParentFolder.Length > 0;
         }
     }
 
