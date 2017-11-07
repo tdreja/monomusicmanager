@@ -92,7 +92,7 @@ namespace MonoMusicManager
         }
     }
 
-    class CopyWorker
+        class CopyWorker
     {
         private MainWindow window;
 
@@ -132,6 +132,8 @@ namespace MonoMusicManager
             {
                 window.progressBar.Value = 0;
                 window.buttonCopy.Enabled = false;
+
+                MessageBox.Show("Copying "+window.importedFiles.Count+" files finished");
             });
         }
     }
@@ -207,6 +209,11 @@ namespace MonoMusicManager
 
                 window.progressBar.Style = ProgressBarStyle.Continuous;
                 window.progressBar.Value = 0;
+
+                if(window.importedFiles.Count == 0)
+                {
+                    MessageBox.Show("No valid files found!");
+                }
             });
         }
     }

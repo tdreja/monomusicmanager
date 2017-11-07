@@ -31,6 +31,9 @@ namespace MonoMusicManager
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.folderLabel = new System.Windows.Forms.Label();
+            this.folderField = new System.Windows.Forms.TextBox();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.musicFileList = new System.Windows.Forms.ListView();
             this.fileHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.titleHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -38,9 +41,6 @@ namespace MonoMusicManager
             this.discHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.trackHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.folderHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.folderField = new System.Windows.Forms.TextBox();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.folderLabel = new System.Windows.Forms.Label();
             this.buttonFolder = new System.Windows.Forms.Button();
             this.buttonCopy = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
@@ -52,10 +52,10 @@ namespace MonoMusicManager
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.musicFileList, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.folderField, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.progressBar, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.folderLabel, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.folderField, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.progressBar, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.musicFileList, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.buttonFolder, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonCopy, 2, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -69,6 +69,41 @@ namespace MonoMusicManager
             this.tableLayoutPanel1.Size = new System.Drawing.Size(782, 553);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
+            // folderLabel
+            // 
+            this.folderLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.folderLabel.AutoSize = true;
+            this.folderLabel.Location = new System.Drawing.Point(3, 13);
+            this.folderLabel.Name = "folderLabel";
+            this.folderLabel.Size = new System.Drawing.Size(150, 17);
+            this.folderLabel.TabIndex = 3;
+            this.folderLabel.Text = "Music Folder: ";
+            this.folderLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // folderField
+            // 
+            this.folderField.AllowDrop = true;
+            this.folderField.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.folderField.Location = new System.Drawing.Point(159, 11);
+            this.folderField.Name = "folderField";
+            this.folderField.ReadOnly = true;
+            this.folderField.ShortcutsEnabled = false;
+            this.folderField.Size = new System.Drawing.Size(463, 22);
+            this.folderField.TabIndex = 0;
+            this.folderField.TabStop = false;
+            this.folderField.Text = "E:\\";
+            this.folderField.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnFolderDrop);
+            this.folderField.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnFolderDrag);
+            // 
+            // progressBar
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.progressBar, 2);
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar.Location = new System.Drawing.Point(3, 511);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(619, 39);
+            this.progressBar.TabIndex = 2;
+            // 
             // musicFileList
             // 
             this.musicFileList.AllowDrop = true;
@@ -80,7 +115,6 @@ namespace MonoMusicManager
             this.trackHeader,
             this.folderHeader});
             this.tableLayoutPanel1.SetColumnSpan(this.musicFileList, 3);
-            this.musicFileList.Cursor = System.Windows.Forms.Cursors.Default;
             this.musicFileList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.musicFileList.GridLines = true;
             this.musicFileList.HoverSelection = true;
@@ -122,40 +156,6 @@ namespace MonoMusicManager
             // 
             this.folderHeader.Text = "Folder";
             this.folderHeader.Width = 485;
-            // 
-            // folderField
-            // 
-            this.folderField.AllowDrop = true;
-            this.folderField.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.folderField.Location = new System.Drawing.Point(159, 11);
-            this.folderField.Name = "folderField";
-            this.folderField.ReadOnly = true;
-            this.folderField.ShortcutsEnabled = false;
-            this.folderField.Size = new System.Drawing.Size(463, 22);
-            this.folderField.TabIndex = 0;
-            this.folderField.TabStop = false;
-            this.folderField.Text = "E:\\";
-            this.folderField.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnFolderDrop);
-            this.folderField.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnFolderDrag);
-            // 
-            // progressBar
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.progressBar, 2);
-            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressBar.Location = new System.Drawing.Point(3, 511);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(619, 39);
-            this.progressBar.TabIndex = 2;
-            // 
-            // folderLabel
-            // 
-            this.folderLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.folderLabel.AutoSize = true;
-            this.folderLabel.Location = new System.Drawing.Point(57, 13);
-            this.folderLabel.Name = "folderLabel";
-            this.folderLabel.Size = new System.Drawing.Size(96, 17);
-            this.folderLabel.TabIndex = 3;
-            this.folderLabel.Text = "Music Folder: ";
             // 
             // buttonFolder
             // 
