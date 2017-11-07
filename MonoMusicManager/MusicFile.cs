@@ -114,12 +114,12 @@ namespace MonoMusicManager
 
                 //Console.WriteLine("Folder: "+ CreateFolderName() + " File: " + CreateFileName(sourceFile, true));
 
-                Console.WriteLine("Destination: " + Path.Combine(newPath, CreateFolderName(), CreateFileName(sourceFile, true)));
-                return Path.Combine(newPath, CreateFolderName(), CreateFileName(sourceFile, true));
+                //Console.WriteLine("Destination: " + Path.Combine(newPath, CreateFolderName(), CreateFileName(sourceFile, true)));
+                return Path.Combine(newPath, CreateFolderName(), CreateFileName(sourceFile, Folder != MusicFolder.Folders.LIEDER));
             }
             else
             {
-                Console.WriteLine("Destination = Source: " + Source);
+                //Console.WriteLine("Destination = Source: " + Source);
                 return Source;
             }
         }
