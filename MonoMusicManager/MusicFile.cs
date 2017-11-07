@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace MonoMusicManager
@@ -113,10 +114,12 @@ namespace MonoMusicManager
 
                 //Console.WriteLine("Folder: "+ CreateFolderName() + " File: " + CreateFileName(sourceFile, true));
 
+                Console.WriteLine("Destination: " + Path.Combine(newPath, CreateFolderName(), CreateFileName(sourceFile, true)));
                 return Path.Combine(newPath, CreateFolderName(), CreateFileName(sourceFile, true));
             }
             else
             {
+                Console.WriteLine("Destination = Source: " + Source);
                 return Source;
             }
         }
@@ -133,19 +136,21 @@ namespace MonoMusicManager
 
         private string CreateFolderName()
         {
-            if(Artist != null)
+            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidFileNameChars())))); 
+
+            if (Artist != null)
             {
                 if (Folder == MusicFolder.Folders.LIEDER || Album == null || Album.Length == 0)
                 {
-                    return Artist;
+                    return r.Replace(Artist,"");
                 }
                 else if (HasVariousArtists)
                 {
-                    return Album;
+                    return r.Replace(Album, "");
                 }
                 else
                 {
-                    return Artist + " - " + Album;
+                    return r.Replace(Artist + " - " + Album, "");
                 }
             }
             else
@@ -157,13 +162,15 @@ namespace MonoMusicManager
 
         private string CreateFileName(FileInfo sourceFile, bool useTrackNr)
         {
-            if(useTrackNr && TrackNr > 0)
+            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidFileNameChars()))));
+
+            if (useTrackNr && TrackNr > 0)
             {
-                return FormatDiscNr() + FormatTrackNr() + " - " + Title + sourceFile.Extension;
+                return FormatDiscNr() + FormatTrackNr() + " - " + r.Replace(Title, "") + sourceFile.Extension;
             }
             else
             {
-                return Title + sourceFile.Extension;
+                return r.Replace(Title, "") + sourceFile.Extension;
             }
         }
 
@@ -392,7 +399,7 @@ namespace MonoMusicManager
                 string[] parts = album.Split(' ');
                 StringBuilder builder = new StringBuilder();
 
-                for(int i=0; i < parts.Length; i++)
+                for(int i=1; i < parts.Length; i++)
                 {
                     builder.Clear();
 

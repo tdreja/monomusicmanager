@@ -15,10 +15,17 @@ namespace MonoMusicManager
     {
         internal List<MusicFile> importedFiles;
         internal string mainFolder = "C:\\Users\\thoma\\Music\\";
+        internal bool AllowOverride;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            buttonCopy.Enabled = false;
+            AllowOverride = true;
+
+            mainFolder = Application.StartupPath;
+            folderField.Text = mainFolder;
         }
 
         private void OnMusicItemDrag(object sender, DragEventArgs e)
@@ -35,55 +42,98 @@ namespace MonoMusicManager
 
         private void OnMusicItemDrop(object sender, DragEventArgs e)
         {
-            //Console.WriteLine("Has " + e.Data.GetDataPresent(DataFormats.FileDrop));
-            
-            //musicFileList.Groups.Add(liederGroup);
-
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                /*importedFiles = MusicFolder.ReadMusicFiles(mainFolder, e);
-
-                foreach (MusicFile file in importedFiles)
-                {
-                    ListViewItem item = new ListViewItem(new System.IO.FileInfo(file.Source).Name);
-                    item.SubItems.Add(file.Title);
-                    item.SubItems.Add(file.Artist);
-                    item.SubItems.Add(file.FormatDiscNr());
-                    item.SubItems.Add(file.FormatTrackNr());
-                    item.SubItems.Add(MusicFolder.GetFolderName(file.Folder));
-
-                    if (file.Folder == MusicFolder.Folders.LIEDER)
-                    {
-                        item.Group = liederGroup;
-                    }
-                    else
-                    {
-                        if(albumGroups.ContainsKey(file.Album))
-                        {
-                            item.Group = albumGroups[file.Album];
-                        }
-                        else
-                        {
-                            ListViewGroup group = new ListViewGroup(file.Album.ToLower(), file.HasParent() ? "'" + file.AlbumParentFolder + "' / '" + file.Album+ "'" : file.Album);
-                            albumGroups.Add(file.Album, group);
-                            musicFileList.Groups.Add(group);
-                            item.Group = group;
-                        }
-                    }
-
-                    musicFileList.Invoke((MethodInvoker)delegate
-                    {
-                        musicFileList.Items.Add(item);
-                    });
-
-                }*/
-
+                progressBar.Style = ProgressBarStyle.Marquee;
                 new Thread(new ImportWorker(e.Data.GetData(DataFormats.FileDrop) as string[], this).Import).Start();
             }
-            
-            
         }
-        
+
+        private void OnFolderDrag(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void OnFolderDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                if (files.Length > 0 && files[0] != null)
+                {
+                    FileAttributes attr = File.GetAttributes(files[0]);
+                    if (attr.HasFlag(FileAttributes.Directory))
+                    {
+                        DirectoryInfo directory = new DirectoryInfo(files[0]);
+                        if (directory.Exists)
+                        {
+                            mainFolder = directory.FullName;
+                            folderField.Text = mainFolder;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void OnCopyClick(object sender, EventArgs e)
+        {
+            if(importedFiles.Count > 0)
+            {
+                progressBar.Style = ProgressBarStyle.Continuous;
+                new Thread(new CopyWorker(this).Copy).Start();
+            }
+        }
+    }
+
+    class CopyWorker
+    {
+        private MainWindow window;
+
+        internal CopyWorker(MainWindow window)
+        {
+            this.window = window;
+        }
+
+        internal void Copy()
+        {
+            Playlist playlist = new Playlist();
+            MusicFile file;
+            string song;
+
+            for(int i=0; i < window.importedFiles.Count; i++)
+            {
+                window.Invoke((MethodInvoker)delegate
+                {
+                    window.progressBar.Value = (i*100) / window.importedFiles.Count;
+                });
+
+                file = window.importedFiles[i];
+                song = null;
+
+                if(file.CanCopy())
+                {
+                    song = file.CopyToDestination(window.mainFolder, window.AllowOverride);
+                }
+
+                if(song != null)
+                {
+                    playlist.AddSong(song);
+                }
+            }
+
+            window.Invoke((MethodInvoker)delegate
+            {
+                window.progressBar.Value = 0;
+                window.buttonCopy.Enabled = false;
+            });
+        }
     }
 
     class ImportWorker
@@ -99,11 +149,6 @@ namespace MonoMusicManager
 
         internal void Import()
         {
-            /*window.musicFileList.Invoke((MethodInvoker)delegate
-            {
-                window.musicFileList.Items.Clear();
-                window.musicFileList.Groups.Clear();
-            });*/
 
             Dictionary<string, ListViewGroup> albumGroups = new Dictionary<string, ListViewGroup>();
             List<ListViewItem> items = new List<ListViewItem>();
@@ -139,13 +184,9 @@ namespace MonoMusicManager
                 }
 
                 items.Add(item);
-                /*window.musicFileList.Invoke((MethodInvoker)delegate
-                {
-                    window.musicFileList.Items.Add(item);
-                });*/
             }
 
-            window.musicFileList.Invoke((MethodInvoker)delegate
+            window.Invoke((MethodInvoker)delegate
             {
                 window.musicFileList.Items.Clear();
                 window.musicFileList.Groups.Clear();
@@ -161,6 +202,11 @@ namespace MonoMusicManager
                 {
                     window.musicFileList.AutoResizeColumn(i, i != 0 ? ColumnHeaderAutoResizeStyle.HeaderSize : ColumnHeaderAutoResizeStyle.ColumnContent);
                 }
+
+                window.buttonCopy.Enabled = window.importedFiles.Count != 0;
+
+                window.progressBar.Style = ProgressBarStyle.Continuous;
+                window.progressBar.Value = 0;
             });
         }
     }
