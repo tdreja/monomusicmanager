@@ -36,6 +36,7 @@ namespace MonoMusicManager
         {
             if(e.Data.GetDataPresent(DataFormats.FileDrop))
             {
+                //Console.WriteLine("Can do!");
                 e.Effect = DragDropEffects.Copy;
             }
             else
@@ -46,8 +47,15 @@ namespace MonoMusicManager
 
         private void OnFileMusicDrop(object sender, DragEventArgs e)
         {
+            //Console.WriteLine("Has " + e.Data.GetDataPresent(DataFormats.FileDrop));
+
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
+                /*foreach(string str in e.Data.GetData(DataFormats.FileDrop) as string[])
+                {
+                    Console.WriteLine("File " + str);
+                }*/
+
                 progressBar.Style = ProgressBarStyle.Marquee;
                 new Thread(new ImportWorker(e.Data.GetData(DataFormats.FileDrop) as string[], this).Import).Start();
             }
@@ -224,6 +232,11 @@ namespace MonoMusicManager
                 if(index != 0)
                 {
                     playlist.Name = playlist.Name + "_" + index.ToString("000");
+                }
+
+                if(!info.Directory.Exists)
+                {
+                    Directory.CreateDirectory(info.Directory.FullName);
                 }
 
                 //File.CreateText(info.FullName);
