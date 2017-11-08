@@ -9,11 +9,15 @@ namespace MonoMusicManager
 {
     class Playlist
     {
+        public string Name;
         public List<string> Songs { get; private set; }
+        public bool ShortenPaths { get; private set; }
 
-        public Playlist()
+        public Playlist(bool shortenPaths)
         {
             Songs = new List<string>();
+            ShortenPaths = shortenPaths;
+            Name = DateTime.Now.ToString("yyyy-MM-dd");
         }
 
         public void AddSong(string path)
@@ -23,40 +27,47 @@ namespace MonoMusicManager
 
         public string PrintSong(string song)
         {
-            List<string> folders = MusicFolder.GetAllFolderNames();
             FileInfo file = new System.IO.FileInfo(song);
-            DirectoryInfo directory = file.Directory;
-            bool searchingHierachy = true;
+            song = file.FullName;
 
-            while (searchingHierachy && directory.Parent != null)
+            if(ShortenPaths)
             {
-                foreach (String folder in folders)
+                List<string> folders = MusicFolder.GetAllFolderNames();
+                DirectoryInfo directory = file.Directory;
+
+                bool searchingHierachy = true;
+
+                while (searchingHierachy && directory.Parent != null)
                 {
-                    if (directory.Name.Equals(folder))
+                    foreach (String folder in folders)
                     {
-                        searchingHierachy = false;
+                        if (directory.Name.Equals(folder))
+                        {
+                            searchingHierachy = false;
+                            break;
+                        }
+                    }
+
+                    if (searchingHierachy)
+                    {
+                        directory = directory.Parent;
+                    }
+                    else
+                    {
                         break;
                     }
+
+                    //Console.WriteLine(directory.FullName);
                 }
 
-                if (searchingHierachy)
+                //Console.WriteLine("Result " + directory.FullName);
+                if (!searchingHierachy)
                 {
-                    directory = directory.Parent;
+                    song = ".." + file.FullName.Replace(directory.Parent.FullName, "");
+                    song = song.Replace("\\", "/");
                 }
-                else
-                {
-                    break;
-                }
-
-                //Console.WriteLine(directory.FullName);
             }
-
-            //Console.WriteLine("Result " + directory.FullName);
-            if (!searchingHierachy)
-            {
-                song = ".." + file.FullName.Replace(directory.Parent.FullName, "");
-                song = song.Replace("\\", "/");
-            }
+            
             //Console.WriteLine("Path " + song);
 
             return song;
@@ -69,7 +80,7 @@ namespace MonoMusicManager
             XElement body = new XElement("body");
             XElement generator = new XElement("meta");
             XElement itemCount = new XElement("meta");
-            XElement title = new XElement("title", "2017");
+            XElement title = new XElement("title", Name);
             XElement seq = new XElement("seq");
 
             generator.SetAttributeValue("name", "Generator");
@@ -95,6 +106,11 @@ namespace MonoMusicManager
             smil.Add(body);
 
             return smil;
+        }
+
+        public string CreateXMLstring()
+        {
+            return "<?wpl version=\"1.0\"?>" + CreateXML().ToString();
         }
     }
 }

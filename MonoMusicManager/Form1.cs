@@ -14,7 +14,8 @@ namespace MonoMusicManager
     public partial class MainWindow : Form
     {
         internal List<MusicFile> importedFiles;
-        internal string mainFolder = "C:\\Users\\thoma\\Music\\";
+        internal string musicDirectory;
+        internal string playlistDirectory;
         internal bool AllowOverride;
 
         public MainWindow()
@@ -24,11 +25,14 @@ namespace MonoMusicManager
             buttonCopy.Enabled = false;
             AllowOverride = true;
 
-            mainFolder = Application.StartupPath;
-            folderField.Text = mainFolder;
+            musicDirectory = Application.StartupPath;
+            playlistDirectory = MusicFolder.GetPath(musicDirectory, MusicFolder.Folders.PLAYLISTS);
+
+            musicFolderField.Text = musicDirectory;
+            playlistFolderField.Text = playlistDirectory;
         }
 
-        private void OnMusicItemDrag(object sender, DragEventArgs e)
+        private void OnFileDrag(object sender, DragEventArgs e)
         {
             if(e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -40,7 +44,7 @@ namespace MonoMusicManager
             }
         }
 
-        private void OnMusicItemDrop(object sender, DragEventArgs e)
+        private void OnFileMusicDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -49,35 +53,17 @@ namespace MonoMusicManager
             }
         }
 
-        private void OnFolderDrag(object sender, DragEventArgs e)
+        private void OnDirectoryMusicDrop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            string folder = GetDirectoryFrom(e);
+            if(folder != null)
             {
-                e.Effect = DragDropEffects.Copy;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-        }
+                musicDirectory = folder;
+                musicFolderField.Text = folder;
 
-        private void OnFolderDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
-                if (files.Length > 0 && files[0] != null)
+                if(importedFiles != null && importedFiles.Count != 0)
                 {
-                    FileAttributes attr = File.GetAttributes(files[0]);
-                    if (attr.HasFlag(FileAttributes.Directory))
-                    {
-                        DirectoryInfo directory = new DirectoryInfo(files[0]);
-                        if (directory.Exists)
-                        {
-                            mainFolder = directory.FullName;
-                            folderField.Text = mainFolder;
-                        }
-                    }
+                    new Thread(new ImportWorker(GetImportedPaths(), this).Import).Start();
                 }
             }
         }
@@ -90,9 +76,96 @@ namespace MonoMusicManager
                 new Thread(new CopyWorker(this).Copy).Start();
             }
         }
+
+        private void OnDirectoryPlaylistDrop(object sender, DragEventArgs e)
+        {
+            string folder = GetDirectoryFrom(e);
+            if(folder != null)
+            {
+                playlistDirectory = folder;
+                playlistFolderField.Text = folder;
+                checkBoxPlaylist.Checked = true;
+            }
+        }
+
+        private string GetDirectoryFrom(DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                if (files.Length > 0 && files[0] != null)
+                {
+                    FileAttributes attr = File.GetAttributes(files[0]);
+                    if (attr.HasFlag(FileAttributes.Directory))
+                    {
+                        DirectoryInfo directory = new DirectoryInfo(files[0]);
+                        if (directory.Exists)
+                        {
+                            return directory.FullName;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        private string[] GetImportedPaths()
+        {
+            string[] paths = new string[importedFiles.Count];
+            for(int i=0; i < paths.Length; i++)
+            {
+                paths[i] = importedFiles[i].Source;
+            }
+
+            return paths;
+        }
+
+        private void OnMusicFolderClick(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    string folder = Directory.GetFiles(fbd.SelectedPath)[0];
+                    if (folder != null)
+                    {
+                        FileInfo info = new FileInfo(folder);
+                        musicDirectory = info.Directory.FullName;
+                        musicFolderField.Text = musicDirectory;
+
+                        if (importedFiles != null && importedFiles.Count != 0)
+                        {
+                            new Thread(new ImportWorker(GetImportedPaths(), this).Import).Start();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void OnPlaylistFolderClick(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    string folder = Directory.GetFiles(fbd.SelectedPath)[0];
+                    if (folder != null)
+                    {
+                        FileInfo info = new FileInfo(folder);
+                        playlistDirectory = info.Directory.FullName;
+                        playlistFolderField.Text = playlistDirectory;
+                        checkBoxPlaylist.Checked = true;
+                    }
+                }
+            }
+        }
     }
 
-        class CopyWorker
+    class CopyWorker
     {
         private MainWindow window;
 
@@ -103,7 +176,7 @@ namespace MonoMusicManager
 
         internal void Copy()
         {
-            Playlist playlist = new Playlist();
+            Playlist playlist = new Playlist(window.playlistDirectory.Contains(window.musicDirectory));
             MusicFile file;
             string song;
 
@@ -119,13 +192,32 @@ namespace MonoMusicManager
 
                 if(file.CanCopy())
                 {
-                    song = file.CopyToDestination(window.mainFolder, window.AllowOverride);
+                    song = file.CopyToDestination(window.musicDirectory, window.checkBoxOverride.Checked);
                 }
 
                 if(song != null)
                 {
                     playlist.AddSong(song);
                 }
+            }
+
+            if(window.checkBoxPlaylist.Checked)
+            {
+                int index = 0;
+                FileInfo info = new FileInfo(Path.Combine(window.playlistDirectory, playlist.Name + ".wpl"));
+                while(info.Exists)
+                {
+                    index++;
+                    info = new FileInfo(Path.Combine(window.playlistDirectory, playlist.Name + "_" + index.ToString("000") + ".wpl"));
+                }
+
+                if(index != 0)
+                {
+                    playlist.Name = playlist.Name + "_" + index.ToString("000");
+                }
+
+                //File.CreateText(info.FullName);
+                File.WriteAllText(info.FullName, playlist.CreateXMLstring());
             }
 
             window.Invoke((MethodInvoker)delegate
@@ -156,7 +248,7 @@ namespace MonoMusicManager
             List<ListViewItem> items = new List<ListViewItem>();
             ListViewGroup liederGroup = new ListViewGroup("lieder", "Lieder");
 
-            window.importedFiles = MusicFolder.ReadMusicFiles(window.mainFolder, files);
+            window.importedFiles = MusicFolder.ReadMusicFiles(window.musicDirectory, files);
 
             foreach (MusicFile file in window.importedFiles)
             {

@@ -87,7 +87,11 @@ namespace MonoMusicManager
                 {
                     Directory.CreateDirectory(dest.Directory.FullName);
                 }
-                File.Copy(Source, dest.FullName, overide);
+
+                if(!Source.Equals(dest.FullName))
+                {
+                    File.Copy(Source, dest.FullName, overide);
+                }
 
                 return dest.FullName;
             }
