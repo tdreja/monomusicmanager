@@ -128,11 +128,10 @@ namespace MonoMusicManager
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    string folder = Directory.GetFiles(fbd.SelectedPath)[0];
-                    if (folder != null)
+                    DirectoryInfo dir = new DirectoryInfo(fbd.SelectedPath);
+                    if (dir.Exists)
                     {
-                        FileInfo info = new FileInfo(folder);
-                        musicDirectory = info.Directory.FullName;
+                        musicDirectory = dir.FullName;
                         musicFolderField.Text = musicDirectory;
 
                         if (importedFiles != null && importedFiles.Count != 0)
@@ -152,14 +151,25 @@ namespace MonoMusicManager
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    string folder = Directory.GetFiles(fbd.SelectedPath)[0];
-                    if (folder != null)
-                    {
-                        FileInfo info = new FileInfo(folder);
-                        playlistDirectory = info.Directory.FullName;
+                    DirectoryInfo dir = new DirectoryInfo(fbd.SelectedPath);
+                    if(dir.Exists){
+                        playlistDirectory = dir.FullName;
                         playlistFolderField.Text = playlistDirectory;
                         checkBoxPlaylist.Checked = true;
                     }
+                }
+            }
+        }
+
+        private void OnImportFilesClick(object sender, EventArgs e)
+        {
+            using (var fbd = new OpenFileDialog())
+            {
+                fbd.Multiselect = true;
+                DialogResult result = fbd.ShowDialog();
+                if(result == DialogResult.OK && fbd.FileNames != null && fbd.FileNames.Length > 0)
+                {
+                    new Thread(new ImportWorker(fbd.FileNames, this).Import).Start();
                 }
             }
         }

@@ -49,6 +49,7 @@ namespace MonoMusicManager
             this.labelSettings = new System.Windows.Forms.Label();
             this.checkBoxOverride = new System.Windows.Forms.CheckBox();
             this.buttonPlaylistFolder = new System.Windows.Forms.Button();
+            this.selectMusicFiles = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,6 +72,7 @@ namespace MonoMusicManager
             this.tableLayoutPanel1.Controls.Add(this.labelSettings, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxOverride, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.buttonPlaylistFolder, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.selectMusicFiles, 3, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -265,6 +267,17 @@ namespace MonoMusicManager
             this.buttonPlaylistFolder.UseVisualStyleBackColor = true;
             this.buttonPlaylistFolder.Click += new System.EventHandler(this.OnPlaylistFolderClick);
             // 
+            // selectMusicFiles
+            // 
+            this.selectMusicFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.selectMusicFiles.Location = new System.Drawing.Point(707, 91);
+            this.selectMusicFiles.Name = "selectMusicFiles";
+            this.selectMusicFiles.Size = new System.Drawing.Size(172, 38);
+            this.selectMusicFiles.TabIndex = 12;
+            this.selectMusicFiles.Text = "Import Music Files";
+            this.selectMusicFiles.UseVisualStyleBackColor = true;
+            this.selectMusicFiles.Click += new System.EventHandler(this.OnImportFilesClick);
+            // 
             // MainWindow
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -300,6 +313,7 @@ namespace MonoMusicManager
         private System.Windows.Forms.Label labelSettings;
         private System.Windows.Forms.Button buttonPlaylistFolder;
         internal System.Windows.Forms.CheckBox checkBoxOverride;
+        private System.Windows.Forms.Button selectMusicFiles;
     }
 }
 
