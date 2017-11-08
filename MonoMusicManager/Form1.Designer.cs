@@ -34,15 +34,6 @@ namespace MonoMusicManager
             this.labelMusicFolder = new System.Windows.Forms.Label();
             this.musicFolderField = new System.Windows.Forms.TextBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.musicFileList = new System.Windows.Forms.ListView();
-            this.fileHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.titleHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.artistHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.discHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.trackHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.folderHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.bitRateHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.durationHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonMusicFolder = new System.Windows.Forms.Button();
             this.buttonCopy = new System.Windows.Forms.Button();
             this.labelPlaylistFolder = new System.Windows.Forms.Label();
@@ -52,6 +43,7 @@ namespace MonoMusicManager
             this.checkBoxOverride = new System.Windows.Forms.CheckBox();
             this.buttonPlaylistFolder = new System.Windows.Forms.Button();
             this.selectMusicFiles = new System.Windows.Forms.Button();
+            this.contentTable = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,7 +57,6 @@ namespace MonoMusicManager
             this.tableLayoutPanel1.Controls.Add(this.labelMusicFolder, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.musicFolderField, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.progressBar, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.musicFileList, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.buttonMusicFolder, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonCopy, 2, 4);
             this.tableLayoutPanel1.Controls.Add(this.labelPlaylistFolder, 0, 1);
@@ -75,6 +66,7 @@ namespace MonoMusicManager
             this.tableLayoutPanel1.Controls.Add(this.checkBoxOverride, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.buttonPlaylistFolder, 3, 1);
             this.tableLayoutPanel1.Controls.Add(this.selectMusicFiles, 3, 2);
+            this.tableLayoutPanel1.Controls.Add(this.contentTable, 0, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -123,74 +115,6 @@ namespace MonoMusicManager
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(799, 26);
             this.progressBar.TabIndex = 2;
-            // 
-            // musicFileList
-            // 
-            this.musicFileList.AllowDrop = true;
-            this.musicFileList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.fileHeader,
-            this.titleHeader,
-            this.artistHeader,
-            this.discHeader,
-            this.trackHeader,
-            this.folderHeader,
-            this.bitRateHeader,
-            this.durationHeader});
-            this.tableLayoutPanel1.SetColumnSpan(this.musicFileList, 4);
-            this.musicFileList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.musicFileList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.musicFileList.GridLines = true;
-            this.musicFileList.HoverSelection = true;
-            this.musicFileList.LabelEdit = true;
-            this.musicFileList.Location = new System.Drawing.Point(3, 93);
-            this.musicFileList.MultiSelect = false;
-            this.musicFileList.Name = "musicFileList";
-            this.musicFileList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.musicFileList.Size = new System.Drawing.Size(1002, 633);
-            this.musicFileList.TabIndex = 1;
-            this.musicFileList.UseCompatibleStateImageBehavior = false;
-            this.musicFileList.View = System.Windows.Forms.View.Details;
-            this.musicFileList.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnFileMusicDrop);
-            this.musicFileList.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnFileDrag);
-            // 
-            // fileHeader
-            // 
-            this.fileHeader.Text = "File";
-            this.fileHeader.Width = 34;
-            // 
-            // titleHeader
-            // 
-            this.titleHeader.Text = "Title";
-            this.titleHeader.Width = 38;
-            // 
-            // artistHeader
-            // 
-            this.artistHeader.Text = "Artist";
-            this.artistHeader.Width = 41;
-            // 
-            // discHeader
-            // 
-            this.discHeader.Text = "Disc";
-            // 
-            // trackHeader
-            // 
-            this.trackHeader.Text = "Track";
-            // 
-            // folderHeader
-            // 
-            this.folderHeader.DisplayIndex = 7;
-            this.folderHeader.Text = "Folder";
-            this.folderHeader.Width = 485;
-            // 
-            // bitRateHeader
-            // 
-            this.bitRateHeader.DisplayIndex = 5;
-            this.bitRateHeader.Text = "Bitrate";
-            // 
-            // durationHeader
-            // 
-            this.durationHeader.DisplayIndex = 6;
-            this.durationHeader.Text = "Duration";
             // 
             // buttonMusicFolder
             // 
@@ -296,6 +220,24 @@ namespace MonoMusicManager
             this.selectMusicFiles.UseVisualStyleBackColor = true;
             this.selectMusicFiles.Click += new System.EventHandler(this.OnImportFilesClick);
             // 
+            // contentTable
+            // 
+            this.contentTable.AllowDrop = true;
+            this.contentTable.ColumnCount = 1;
+            this.tableLayoutPanel1.SetColumnSpan(this.contentTable, 4);
+            this.contentTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.contentTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.contentTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contentTable.Location = new System.Drawing.Point(3, 93);
+            this.contentTable.Name = "contentTable";
+            this.contentTable.RowCount = 2;
+            this.contentTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.contentTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.contentTable.Size = new System.Drawing.Size(1002, 633);
+            this.contentTable.TabIndex = 13;
+            this.contentTable.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnFileMusicDrop);
+            this.contentTable.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnFileDrag);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -314,13 +256,6 @@ namespace MonoMusicManager
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        internal System.Windows.Forms.ListView musicFileList;
-        private System.Windows.Forms.ColumnHeader fileHeader;
-        private System.Windows.Forms.ColumnHeader titleHeader;
-        private System.Windows.Forms.ColumnHeader artistHeader;
-        private System.Windows.Forms.ColumnHeader discHeader;
-        private System.Windows.Forms.ColumnHeader trackHeader;
-        private System.Windows.Forms.ColumnHeader folderHeader;
         private System.Windows.Forms.TextBox musicFolderField;
         internal System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label labelMusicFolder;
@@ -333,8 +268,7 @@ namespace MonoMusicManager
         private System.Windows.Forms.Button buttonPlaylistFolder;
         internal System.Windows.Forms.CheckBox checkBoxOverride;
         private System.Windows.Forms.Button selectMusicFiles;
-        private System.Windows.Forms.ColumnHeader bitRateHeader;
-        private System.Windows.Forms.ColumnHeader durationHeader;
+        internal System.Windows.Forms.TableLayoutPanel contentTable;
     }
 }
 

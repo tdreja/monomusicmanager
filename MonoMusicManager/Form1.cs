@@ -308,7 +308,7 @@ namespace MonoMusicManager
 
             window.Invoke((MethodInvoker)delegate
             {
-                window.musicFileList.Items.Clear();
+                /*window.musicFileList.Items.Clear();
                 window.musicFileList.Groups.Clear();
                 window.musicFileList.Groups.Add(liederGroup);
                 foreach (ListViewGroup gr in albumGroups.Values)
@@ -321,6 +321,11 @@ namespace MonoMusicManager
                 for (int i = 0; i < window.musicFileList.Columns.Count; i++)
                 {
                     window.musicFileList.AutoResizeColumn(i, i != 0 ? ColumnHeaderAutoResizeStyle.HeaderSize : ColumnHeaderAutoResizeStyle.ColumnContent);
+                }*/
+
+                foreach(MusicFile file in window.importedFiles)
+                {
+                    window.contentTable.Controls.Add(new AlbumPanel());
                 }
 
                 window.buttonCopy.Enabled = window.importedFiles.Count != 0;
