@@ -14,6 +14,8 @@ namespace MonoMusicManager
         public string Album { get; protected set; }
         public string Genre { get; protected set; }
         public string Source { get; protected set; }
+        public int BiteRate { get; protected set; }
+        public TimeSpan Duration { get; protected set; }
 
         public uint TrackNr { get; protected set; }
         public uint DiscNr { get; protected set; }
@@ -39,6 +41,8 @@ namespace MonoMusicManager
                 Genre = file.Tag.FirstGenre;
                 TrackNr = file.Tag.Track;
                 DiscNr = file.Tag.Disc;
+                BiteRate = file.Properties.AudioBitrate;
+                Duration = file.Properties.Duration;
             }
             else
             {
@@ -48,6 +52,8 @@ namespace MonoMusicManager
                 Genre = null;
                 TrackNr = 0;
                 DiscNr = 0;
+                BiteRate = 0;
+                Duration = TimeSpan.FromSeconds(0);
             }
 
             Folder = MusicFolder.Folders.NONE;
@@ -71,6 +77,8 @@ namespace MonoMusicManager
             HasVariousArtists = false;
             MaxDiscNr = 0;
             MaxTrackNr = 0;
+            BiteRate = 0;
+            Duration = TimeSpan.FromSeconds(0);
         }
 
         public override string ToString()

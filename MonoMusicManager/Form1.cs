@@ -281,6 +281,9 @@ namespace MonoMusicManager
                 item.SubItems.Add(file.FormatDiscNr());
                 item.SubItems.Add(file.FormatTrackNr());
                 item.SubItems.Add(MusicFolder.GetFolderName(file.Folder));
+                item.SubItems.Add(file.BiteRate.ToString() + " kbit/s");
+                item.SubItems.Add(file.Duration.ToString(@"mm\:ss"));
+
 
                 if (file.Folder == MusicFolder.Folders.LIEDER)
                 {
