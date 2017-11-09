@@ -18,6 +18,8 @@ namespace MonoMusicManager
         internal string playlistDirectory;
         internal bool AllowOverride;
 
+        //private static MenuItem[] folderMenu = new MenuItem[] { new MenuItem(MusicFolder.GetFolderName(MusicFolder.Folders.ALBUM)), new MenuItem(MusicFolder.GetFolderName(MusicFolder.Folders.FILMMUSIK)), new MenuItem(MusicFolder.GetFolderName(MusicFolder.Folders.PODCASTS)) };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -181,6 +183,70 @@ namespace MonoMusicManager
                 }
             }
         }
+
+        private void OnListMouseClick(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+                if (musicFileList.FocusedItem.Bounds.Contains(e.Location) == true)
+                {
+                    if(!musicFileList.FocusedItem.Group.Name.Equals("lieder"))
+                    {
+                        MenuItem[] items = new MenuItem[3];
+
+                        items[0] = new MenuItem(MusicFolder.GetFolderName(MusicFolder.Folders.ALBUM));
+                        items[0].Click += OnClickMenuAlbum;
+                        items[1] = new MenuItem(MusicFolder.GetFolderName(MusicFolder.Folders.FILMMUSIK));
+                        items[1].Click += OnClickMenuSoundtrack;
+                        items[2] = new MenuItem(MusicFolder.GetFolderName(MusicFolder.Folders.PODCASTS));
+                        items[2].Click += OnClickMenuPodcast;
+
+
+                        musicFileList.ContextMenu = new ContextMenu(items);
+                    }
+                }
+            }
+        }
+
+        private void OnClickMenuSoundtrack(object sender, EventArgs e)
+        {
+            MusicFile file = findMusicFile(musicFileList.FocusedItem);
+            if (file != null && file.Folder != MusicFolder.Folders.FILMMUSIK)
+            {
+                Console.WriteLine("We need to change " + file);
+            }
+        }
+
+        private void OnClickMenuAlbum(object sender, EventArgs e)
+        {
+            MusicFile file = findMusicFile(musicFileList.FocusedItem);
+            if (file != null && file.Folder != MusicFolder.Folders.ALBUM)
+            {
+                Console.WriteLine("We need to change " + file);
+            }
+        }
+
+        private void OnClickMenuPodcast(object sender, EventArgs e)
+        {
+            //Console.WriteLine("Yey "+ musicFileList.FocusedItem.SubItems[0].Text);
+            MusicFile file = findMusicFile(musicFileList.FocusedItem);
+            if(file != null && file.Folder != MusicFolder.Folders.PODCASTS)
+            {
+                Console.WriteLine("We need to change " + file);
+            }
+        }
+
+        private MusicFile findMusicFile(ListViewItem item)
+        {
+            foreach(MusicFile mf in importedFiles)
+            {
+                if(mf.Title.Equals(item.SubItems[1].Text) && mf.Artist.Equals(item.SubItems[2].Text))
+                {
+                    return mf;
+                }
+            }
+            return null;
+        }
     }
 
     class CopyWorker
@@ -275,15 +341,14 @@ namespace MonoMusicManager
 
             foreach (MusicFile file in window.importedFiles)
             {
-                ListViewItem item = new ListViewItem(new System.IO.FileInfo(file.Source).Name);
+                ListViewItem item = new ListViewItem(MusicFolder.GetFolderName(file.Folder));
                 item.SubItems.Add(file.Title);
                 item.SubItems.Add(file.Artist);
                 item.SubItems.Add(file.FormatDiscNr());
                 item.SubItems.Add(file.FormatTrackNr());
-                item.SubItems.Add(MusicFolder.GetFolderName(file.Folder));
+                item.SubItems.Add(new System.IO.FileInfo(file.Source).Name);
                 item.SubItems.Add(file.BiteRate.ToString() + " kbit/s");
                 item.SubItems.Add(file.Duration.ToString(@"mm\:ss"));
-
 
                 if (file.Folder == MusicFolder.Folders.LIEDER)
                 {
@@ -308,7 +373,7 @@ namespace MonoMusicManager
 
             window.Invoke((MethodInvoker)delegate
             {
-                /*window.musicFileList.Items.Clear();
+                window.musicFileList.Items.Clear();
                 window.musicFileList.Groups.Clear();
                 window.musicFileList.Groups.Add(liederGroup);
                 foreach (ListViewGroup gr in albumGroups.Values)
@@ -321,11 +386,6 @@ namespace MonoMusicManager
                 for (int i = 0; i < window.musicFileList.Columns.Count; i++)
                 {
                     window.musicFileList.AutoResizeColumn(i, i != 0 ? ColumnHeaderAutoResizeStyle.HeaderSize : ColumnHeaderAutoResizeStyle.ColumnContent);
-                }*/
-
-                foreach(MusicFile file in window.importedFiles)
-                {
-                    window.contentTable.Controls.Add(new AlbumPanel());
                 }
 
                 window.buttonCopy.Enabled = window.importedFiles.Count != 0;
