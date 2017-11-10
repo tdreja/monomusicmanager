@@ -364,9 +364,14 @@ namespace MonoMusicManager
                             file.MaxTrackNr = albumInfos[file.Album].MaxTrack;
                         }
 
-                        if (albumInfos.ContainsKey(file.Album) && albumInfos[file.Album].SongCount >= MINIMUM_ALBUM_SONG_NUMBER)
+                        bool isPodcast = CheckForPodcast(file);
+                        if (albumInfos.ContainsKey(file.Album) && (albumInfos[file.Album].SongCount >= MINIMUM_ALBUM_SONG_NUMBER || isPodcast))
                         {
-                            if (file.Genre != null && file.Genre.Contains("Soundtrack"))
+                            if(isPodcast)
+                            {
+                                file.Folder = Folders.PODCASTS;
+                            }
+                            else if (CheckForSoundtrack(file))
                             {
                                 file.Folder = Folders.FILMMUSIK;
                             }
@@ -400,6 +405,16 @@ namespace MonoMusicManager
             }
 
             return sortedFiles;
+        }
+
+        private static bool CheckForSoundtrack(MusicFile file)
+        {
+            return file.Genre != null && (file.Genre.Contains("Soundtrack") || file.Genre.Contains("Showtune") || file.Genre.Contains("Musical"));
+        }
+
+        private static bool CheckForPodcast(MusicFile file)
+        {
+            return file.Genre != null && (file.Genre.Contains("Podcast") || file.Genre.Contains("Audiobook") || file.Genre.Contains("Speech"));
         }
 
         public static List<MusicFile> RegroupFiles(List<MusicFile> oldFiles, string mainFolder, Folders newFolder)
