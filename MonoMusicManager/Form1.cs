@@ -210,33 +210,38 @@ namespace MonoMusicManager
 
         private void OnClickMenuSoundtrack(object sender, EventArgs e)
         {
-            MusicFile file = findMusicFile(musicFileList.FocusedItem);
+            MusicFile file = FindMusicFile(musicFileList.FocusedItem);
             if (file != null && file.Folder != MusicFolder.Folders.FILMMUSIK)
             {
-                Console.WriteLine("We need to change " + file);
+                SwitchItemGroup(musicFileList.FocusedItem.Group, MusicFolder.Folders.FILMMUSIK);
             }
+        }
+
+        private void SwitchItemGroup(ListViewGroup group, MusicFolder.Folders folder)
+        {
+            new Thread(new UpdateWorker(group, folder, this).Update).Start();
         }
 
         private void OnClickMenuAlbum(object sender, EventArgs e)
         {
-            MusicFile file = findMusicFile(musicFileList.FocusedItem);
+            MusicFile file = FindMusicFile(musicFileList.FocusedItem);
             if (file != null && file.Folder != MusicFolder.Folders.ALBUM)
             {
-                Console.WriteLine("We need to change " + file);
+                SwitchItemGroup(musicFileList.FocusedItem.Group, MusicFolder.Folders.ALBUM);
             }
         }
 
         private void OnClickMenuPodcast(object sender, EventArgs e)
         {
             //Console.WriteLine("Yey "+ musicFileList.FocusedItem.SubItems[0].Text);
-            MusicFile file = findMusicFile(musicFileList.FocusedItem);
+            MusicFile file = FindMusicFile(musicFileList.FocusedItem);
             if(file != null && file.Folder != MusicFolder.Folders.PODCASTS)
             {
-                Console.WriteLine("We need to change " + file);
+                SwitchItemGroup(musicFileList.FocusedItem.Group, MusicFolder.Folders.PODCASTS);
             }
         }
 
-        private MusicFile findMusicFile(ListViewItem item)
+        internal MusicFile FindMusicFile(ListViewItem item)
         {
             foreach(MusicFile mf in importedFiles)
             {
@@ -315,6 +320,51 @@ namespace MonoMusicManager
                 window.buttonCopy.Enabled = false;
 
                 MessageBox.Show("Copying "+window.importedFiles.Count+" files finished");
+            });
+        }
+    }
+
+    class UpdateWorker
+    {
+        private ListViewGroup viewGroup;
+        private MusicFolder.Folders folder;
+        private MainWindow window;
+
+        internal UpdateWorker(ListViewGroup group, MusicFolder.Folders folder, MainWindow window)
+        {
+            this.viewGroup = group;
+            this.folder = folder;
+            this.window = window;
+        }
+
+        internal void Update()
+        {
+            List<MusicFile> files = new List<MusicFile>();
+            foreach (ListViewItem item in viewGroup.Items)
+            {
+                MusicFile mf = window.FindMusicFile(item);
+                window.importedFiles.Remove(mf);
+                files.Add(mf);
+            }
+
+            files = MusicFolder.RegroupFiles(files, window.musicDirectory, folder);
+
+            window.importedFiles.AddRange(files.ToArray());
+
+            window.Invoke((MethodInvoker)delegate
+            {
+                for(int i=0; i < viewGroup.Items.Count; i++)
+                {
+                    ListViewItem item = viewGroup.Items[i];
+                    MusicFile file = files[i];
+                    item.SubItems[0].Text = MusicFolder.GetFolderName(file.Folder);
+                }
+
+                window.musicFileList.Refresh();
+                for (int i = 0; i < window.musicFileList.Columns.Count; i++)
+                {
+                    window.musicFileList.AutoResizeColumn(i, i != 0 ? ColumnHeaderAutoResizeStyle.HeaderSize : ColumnHeaderAutoResizeStyle.ColumnContent);
+                }
             });
         }
     }

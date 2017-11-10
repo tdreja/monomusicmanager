@@ -402,6 +402,26 @@ namespace MonoMusicManager
             return sortedFiles;
         }
 
+        public static List<MusicFile> RegroupFiles(List<MusicFile> oldFiles, string mainFolder, Folders newFolder)
+        {
+            List<MusicFile> newList = new List<MusicFile>();
+
+            if(oldFiles.Count != 0)
+            {
+                MusicFile first = oldFiles[0];
+                string newParent = CheckParentFolder(first.Artist, first.HasVariousArtists, first.Album, newFolder, mainFolder);
+
+                foreach(MusicFile file in oldFiles)
+                {
+                    file.AlbumParentFolder = newParent;
+                    file.Folder = newFolder;
+                    newList.Add(file);
+                }
+            }
+
+            return newList;
+        }
+
         private static string CheckParentFolder(string artist, bool various, string album, Folders folder, string targetRoot)
         {
             string mainPath = GetPath(targetRoot, folder);
