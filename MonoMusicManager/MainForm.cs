@@ -221,7 +221,7 @@ namespace MonoMusicManager
 
         private void SwitchItemGroup(ListViewGroup group, MusicFolder.Folders folder)
         {
-            new Thread(new UpdateWorker(group, folder, null, null, this).UpdateFolder).Start();
+            new Thread(new UpdateWorker(group, folder, false, null, null, this).UpdateFolder).Start();
         }
 
         private void OnClickMenuAlbum(object sender, EventArgs e)
@@ -251,7 +251,7 @@ namespace MonoMusicManager
 
         public void OnOverrideFolders(MusicFile currentFile, bool overrideParent, string parentText, bool overrideAlbum, string albumText)
         {
-            new Thread(new UpdateWorker(musicFileList.FocusedItem.Group, currentFile.Folder, overrideParent ? parentText : null, overrideAlbum ? albumText : null, this).UpdateParent).Start();
+            new Thread(new UpdateWorker(musicFileList.FocusedItem.Group, currentFile.Folder, overrideParent, parentText, overrideAlbum ? albumText : null, this).UpdateParent).Start();
         }
         
         internal MusicFile FindMusicFile(ListViewItem item)
@@ -347,14 +347,16 @@ namespace MonoMusicManager
         private ListViewGroup viewGroup;
         private MusicFolder.Folders folder;
         private string AlternateAlbumFolder;
+        private bool overrideParent;
         private string AlternateParentFolder;
         private MainWindow window;
 
-        internal UpdateWorker(ListViewGroup group, MusicFolder.Folders folder, string AlternateParent, string AlternateAlbum, MainWindow window)
+        internal UpdateWorker(ListViewGroup group, MusicFolder.Folders folder, bool overrideParent, string AlternateParent, string AlternateAlbum, MainWindow window)
         {
             this.viewGroup = group;
             this.folder = folder;
             this.window = window;
+            this.overrideParent = overrideParent;
 
             this.AlternateAlbumFolder = AlternateAlbum;
             this.AlternateParentFolder = AlternateParent;
@@ -370,7 +372,7 @@ namespace MonoMusicManager
                 files.Add(mf);
             }
 
-            files = MusicFolder.AlterParent(files, AlternateParentFolder != null, AlternateParentFolder, AlternateAlbumFolder != null, AlternateAlbumFolder);
+            files = MusicFolder.AlterParent(files, overrideParent, AlternateParentFolder, AlternateAlbumFolder != null, AlternateAlbumFolder);
 
             window.importedFiles.AddRange(files.ToArray());
 

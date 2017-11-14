@@ -30,6 +30,7 @@ namespace MonoMusicManager
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelMusicFolder = new System.Windows.Forms.Label();
             this.musicFolderField = new System.Windows.Forms.TextBox();
@@ -304,6 +305,7 @@ namespace MonoMusicManager
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1008, 761);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
             this.Text = "Music Manager V9";
             this.Load += new System.EventHandler(this.MainWindow_Load);
