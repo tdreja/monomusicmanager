@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace MonoMusicManager
 {
-    class MusicFile
+    public class MusicFile
     {
         public string Artist { get; protected set; }
         public string Title { get; protected set; }
@@ -23,6 +23,10 @@ namespace MonoMusicManager
         public MusicFolder.Folders Folder { get; internal set; }
 
         public string AlbumParentFolder { get; internal set; }
+
+        public string AlternateAlbumFolder { get; internal set; }
+        public string AlternateParentFolder { get; internal set; }
+
         public bool HasVariousArtists { get; internal set; }
         public uint MaxDiscNr { get; internal set; }
         public uint MaxTrackNr { get; internal set; }
@@ -58,6 +62,8 @@ namespace MonoMusicManager
 
             Folder = MusicFolder.Folders.NONE;
             AlbumParentFolder = null;
+            AlternateAlbumFolder = null;
+            AlternateParentFolder = null;
             HasVariousArtists = false;
             MaxDiscNr = 0;
             MaxTrackNr = 0;
@@ -121,7 +127,14 @@ namespace MonoMusicManager
             {
                 if (HasParent())
                 {
-                    newPath = Path.Combine(newPath, AlbumParentFolder);
+                    if(AlternateParentFolder != null)
+                    {
+                        newPath = Path.Combine(newPath, AlternateParentFolder);
+                    }
+                    else if(AlbumParentFolder != null)
+                    {
+                        newPath = Path.Combine(newPath, AlbumParentFolder);
+                    }
                 }
 
                 //Console.WriteLine("Folder: "+ CreateFolderName() + " File: " + CreateFileName(sourceFile, true));
@@ -146,11 +159,15 @@ namespace MonoMusicManager
             return IsValid() && Folder != MusicFolder.Folders.NONE && Folder != MusicFolder.Folders.PLAYLISTS;
         }
 
-        private string CreateFolderName()
+        public string CreateFolderName()
         {
             Regex r = new Regex(string.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidFileNameChars())))); 
 
-            if (Artist != null)
+            if(AlternateAlbumFolder != null && AlternateAlbumFolder.Length > 0)
+            {
+                return r.Replace(AlternateAlbumFolder, "");
+            }
+            else if (Artist != null)
             {
                 if (Folder == MusicFolder.Folders.LIEDER || Album == null || Album.Length == 0)
                 {
@@ -214,11 +231,30 @@ namespace MonoMusicManager
 
         public bool HasParent()
         {
-            return AlbumParentFolder != null && AlbumParentFolder.Length > 0;
+            return (AlternateParentFolder != null && AlternateParentFolder.Length > 0) ||
+                (AlbumParentFolder != null && AlbumParentFolder.Length > 0);
+        }
+
+        public string GetParent()
+        {
+            if(AlternateParentFolder != null)
+            {
+                return AlternateParentFolder;
+            }
+            return AlbumParentFolder;
+        }
+
+        public string GetAlbumFolder()
+        {
+            if(AlternateAlbumFolder != null)
+            {
+                return AlternateAlbumFolder;
+            }
+            return Album;
         }
     }
 
-    static class MusicFolder
+    public static class MusicFolder
     {
         public const int MINIMUM_ALBUM_SONG_NUMBER = 3;
 
@@ -437,6 +473,32 @@ namespace MonoMusicManager
             return newList;
         }
 
+        public static List<MusicFile> AlterParent(List<MusicFile> files, bool overrideParent, string parentFolder, bool overrideAlbum, string albumFolder)
+        {
+            foreach(MusicFile file in files)
+            {
+                if(overrideAlbum && albumFolder != null && albumFolder.Length > 0)
+                {
+                    file.AlternateAlbumFolder = albumFolder;
+                }
+                else
+                {
+                    file.AlternateAlbumFolder = null;
+                }
+
+                if(overrideParent && parentFolder != null && parentFolder.Length > 0)
+                {
+                    file.AlternateParentFolder = parentFolder;
+                }
+                else
+                {
+                    file.AlternateParentFolder = null;
+                }
+            }
+
+            return files;
+        }
+        
         private static string CheckParentFolder(string artist, bool various, string album, Folders folder, string targetRoot)
         {
             string mainPath = GetPath(targetRoot, folder);
@@ -474,7 +536,7 @@ namespace MonoMusicManager
         }
     }
 
-    class AlbumInfo
+    public class AlbumInfo
     {
         public int SongCount { get; internal set; }
         public uint MaxDisc { get; internal set; }

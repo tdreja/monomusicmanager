@@ -78,7 +78,6 @@ namespace MonoMusicManager
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4F));
@@ -86,17 +85,16 @@ namespace MonoMusicManager
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 84F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1260, 951);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1008, 761);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // labelMusicFolder
             // 
             this.labelMusicFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.labelMusicFolder.AutoSize = true;
-            this.labelMusicFolder.Location = new System.Drawing.Point(4, 10);
-            this.labelMusicFolder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelMusicFolder.Location = new System.Drawing.Point(3, 8);
             this.labelMusicFolder.Name = "labelMusicFolder";
-            this.labelMusicFolder.Size = new System.Drawing.Size(244, 17);
+            this.labelMusicFolder.Size = new System.Drawing.Size(195, 13);
             this.labelMusicFolder.TabIndex = 3;
             this.labelMusicFolder.Text = "Music Folder: ";
             this.labelMusicFolder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -106,12 +104,11 @@ namespace MonoMusicManager
             this.musicFolderField.AllowDrop = true;
             this.musicFolderField.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.SetColumnSpan(this.musicFolderField, 2);
-            this.musicFolderField.Location = new System.Drawing.Point(256, 8);
-            this.musicFolderField.Margin = new System.Windows.Forms.Padding(4);
+            this.musicFolderField.Location = new System.Drawing.Point(204, 5);
             this.musicFolderField.Name = "musicFolderField";
             this.musicFolderField.ReadOnly = true;
             this.musicFolderField.ShortcutsEnabled = false;
-            this.musicFolderField.Size = new System.Drawing.Size(748, 22);
+            this.musicFolderField.Size = new System.Drawing.Size(598, 20);
             this.musicFolderField.TabIndex = 0;
             this.musicFolderField.TabStop = false;
             this.musicFolderField.Text = "E:\\";
@@ -122,10 +119,9 @@ namespace MonoMusicManager
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.progressBar, 3);
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressBar.Location = new System.Drawing.Point(4, 916);
-            this.progressBar.Margin = new System.Windows.Forms.Padding(4);
+            this.progressBar.Location = new System.Drawing.Point(3, 732);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(1000, 31);
+            this.progressBar.Size = new System.Drawing.Size(799, 26);
             this.progressBar.TabIndex = 2;
             // 
             // musicFileList
@@ -146,12 +142,11 @@ namespace MonoMusicManager
             this.musicFileList.GridLines = true;
             this.musicFileList.HoverSelection = true;
             this.musicFileList.LabelEdit = true;
-            this.musicFileList.Location = new System.Drawing.Point(4, 118);
-            this.musicFileList.Margin = new System.Windows.Forms.Padding(4);
+            this.musicFileList.Location = new System.Drawing.Point(3, 93);
             this.musicFileList.MultiSelect = false;
             this.musicFileList.Name = "musicFileList";
             this.musicFileList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.musicFileList.Size = new System.Drawing.Size(1252, 790);
+            this.musicFileList.Size = new System.Drawing.Size(1002, 633);
             this.musicFileList.TabIndex = 1;
             this.musicFileList.UseCompatibleStateImageBehavior = false;
             this.musicFileList.View = System.Windows.Forms.View.Details;
@@ -201,10 +196,9 @@ namespace MonoMusicManager
             // buttonMusicFolder
             // 
             this.buttonMusicFolder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonMusicFolder.Location = new System.Drawing.Point(1012, 4);
-            this.buttonMusicFolder.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonMusicFolder.Location = new System.Drawing.Point(808, 3);
             this.buttonMusicFolder.Name = "buttonMusicFolder";
-            this.buttonMusicFolder.Size = new System.Drawing.Size(244, 30);
+            this.buttonMusicFolder.Size = new System.Drawing.Size(197, 24);
             this.buttonMusicFolder.TabIndex = 4;
             this.buttonMusicFolder.Text = "Change Music Folder";
             this.buttonMusicFolder.UseVisualStyleBackColor = true;
@@ -213,10 +207,9 @@ namespace MonoMusicManager
             // buttonCopy
             // 
             this.buttonCopy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonCopy.Location = new System.Drawing.Point(1012, 916);
-            this.buttonCopy.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonCopy.Location = new System.Drawing.Point(808, 732);
             this.buttonCopy.Name = "buttonCopy";
-            this.buttonCopy.Size = new System.Drawing.Size(244, 31);
+            this.buttonCopy.Size = new System.Drawing.Size(197, 26);
             this.buttonCopy.TabIndex = 5;
             this.buttonCopy.Text = "Copy Files";
             this.buttonCopy.UseVisualStyleBackColor = true;
@@ -226,10 +219,9 @@ namespace MonoMusicManager
             // 
             this.labelPlaylistFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.labelPlaylistFolder.AutoSize = true;
-            this.labelPlaylistFolder.Location = new System.Drawing.Point(4, 48);
-            this.labelPlaylistFolder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelPlaylistFolder.Location = new System.Drawing.Point(3, 38);
             this.labelPlaylistFolder.Name = "labelPlaylistFolder";
-            this.labelPlaylistFolder.Size = new System.Drawing.Size(244, 17);
+            this.labelPlaylistFolder.Size = new System.Drawing.Size(195, 13);
             this.labelPlaylistFolder.TabIndex = 6;
             this.labelPlaylistFolder.Text = "Playlist Folder: ";
             this.labelPlaylistFolder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -239,12 +231,11 @@ namespace MonoMusicManager
             this.playlistFolderField.AllowDrop = true;
             this.playlistFolderField.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.SetColumnSpan(this.playlistFolderField, 2);
-            this.playlistFolderField.Location = new System.Drawing.Point(256, 46);
-            this.playlistFolderField.Margin = new System.Windows.Forms.Padding(4);
+            this.playlistFolderField.Location = new System.Drawing.Point(204, 35);
             this.playlistFolderField.Name = "playlistFolderField";
             this.playlistFolderField.ReadOnly = true;
             this.playlistFolderField.ShortcutsEnabled = false;
-            this.playlistFolderField.Size = new System.Drawing.Size(748, 22);
+            this.playlistFolderField.Size = new System.Drawing.Size(598, 20);
             this.playlistFolderField.TabIndex = 7;
             this.playlistFolderField.Text = "F:\\Playlist";
             this.playlistFolderField.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnDirectoryPlaylistDrop);
@@ -254,10 +245,9 @@ namespace MonoMusicManager
             // 
             this.checkBoxPlaylist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxPlaylist.AutoSize = true;
-            this.checkBoxPlaylist.Location = new System.Drawing.Point(634, 84);
-            this.checkBoxPlaylist.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBoxPlaylist.Location = new System.Drawing.Point(506, 66);
             this.checkBoxPlaylist.Name = "checkBoxPlaylist";
-            this.checkBoxPlaylist.Size = new System.Drawing.Size(370, 21);
+            this.checkBoxPlaylist.Size = new System.Drawing.Size(296, 17);
             this.checkBoxPlaylist.TabIndex = 8;
             this.checkBoxPlaylist.Text = "Create Playlist";
             this.checkBoxPlaylist.UseVisualStyleBackColor = true;
@@ -266,10 +256,9 @@ namespace MonoMusicManager
             // 
             this.labelSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.labelSettings.AutoSize = true;
-            this.labelSettings.Location = new System.Drawing.Point(4, 86);
-            this.labelSettings.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelSettings.Location = new System.Drawing.Point(3, 68);
             this.labelSettings.Name = "labelSettings";
-            this.labelSettings.Size = new System.Drawing.Size(244, 17);
+            this.labelSettings.Size = new System.Drawing.Size(195, 13);
             this.labelSettings.TabIndex = 9;
             this.labelSettings.Text = "Settings: ";
             this.labelSettings.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -278,10 +267,9 @@ namespace MonoMusicManager
             // 
             this.checkBoxOverride.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxOverride.AutoSize = true;
-            this.checkBoxOverride.Location = new System.Drawing.Point(256, 84);
-            this.checkBoxOverride.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBoxOverride.Location = new System.Drawing.Point(204, 66);
             this.checkBoxOverride.Name = "checkBoxOverride";
-            this.checkBoxOverride.Size = new System.Drawing.Size(370, 21);
+            this.checkBoxOverride.Size = new System.Drawing.Size(296, 17);
             this.checkBoxOverride.TabIndex = 10;
             this.checkBoxOverride.Text = "Override Files";
             this.checkBoxOverride.UseVisualStyleBackColor = true;
@@ -290,10 +278,9 @@ namespace MonoMusicManager
             // 
             this.buttonPlaylistFolder.AutoSize = true;
             this.buttonPlaylistFolder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonPlaylistFolder.Location = new System.Drawing.Point(1012, 42);
-            this.buttonPlaylistFolder.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonPlaylistFolder.Location = new System.Drawing.Point(808, 33);
             this.buttonPlaylistFolder.Name = "buttonPlaylistFolder";
-            this.buttonPlaylistFolder.Size = new System.Drawing.Size(244, 30);
+            this.buttonPlaylistFolder.Size = new System.Drawing.Size(197, 24);
             this.buttonPlaylistFolder.TabIndex = 11;
             this.buttonPlaylistFolder.Text = "Change Playlist Folder";
             this.buttonPlaylistFolder.UseVisualStyleBackColor = true;
@@ -302,10 +289,9 @@ namespace MonoMusicManager
             // selectMusicFiles
             // 
             this.selectMusicFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectMusicFiles.Location = new System.Drawing.Point(1012, 80);
-            this.selectMusicFiles.Margin = new System.Windows.Forms.Padding(4);
+            this.selectMusicFiles.Location = new System.Drawing.Point(808, 63);
             this.selectMusicFiles.Name = "selectMusicFiles";
-            this.selectMusicFiles.Size = new System.Drawing.Size(244, 30);
+            this.selectMusicFiles.Size = new System.Drawing.Size(197, 24);
             this.selectMusicFiles.TabIndex = 12;
             this.selectMusicFiles.Text = "Import Music Files";
             this.selectMusicFiles.UseVisualStyleBackColor = true;
@@ -313,14 +299,14 @@ namespace MonoMusicManager
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1260, 951);
+            this.ClientSize = new System.Drawing.Size(1008, 761);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainWindow";
-            this.Text = "Music Manager V7";
+            this.Text = "Music Manager V9";
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -351,6 +337,7 @@ namespace MonoMusicManager
         private System.Windows.Forms.Button selectMusicFiles;
         private System.Windows.Forms.ColumnHeader bitRateHeader;
         private System.Windows.Forms.ColumnHeader durationHeader;
+
     }
 }
 

@@ -62,7 +62,7 @@ namespace MonoMusicManager
                 new Thread(new ImportWorker(e.Data.GetData(DataFormats.FileDrop) as string[], this).Import).Start();
             }
         }
-
+        
         private void OnDirectoryMusicDrop(object sender, DragEventArgs e)
         {
             string folder = GetDirectoryFrom(e);
@@ -192,7 +192,7 @@ namespace MonoMusicManager
                 {
                     if(!musicFileList.FocusedItem.Group.Name.Equals("lieder"))
                     {
-                        MenuItem[] items = new MenuItem[3];
+                        MenuItem[] items = new MenuItem[4];
 
                         items[0] = new MenuItem(MusicFolder.GetFolderName(MusicFolder.Folders.ALBUM));
                         items[0].Click += OnClickMenuAlbum;
@@ -200,6 +200,8 @@ namespace MonoMusicManager
                         items[1].Click += OnClickMenuSoundtrack;
                         items[2] = new MenuItem(MusicFolder.GetFolderName(MusicFolder.Folders.PODCASTS));
                         items[2].Click += OnClickMenuPodcast;
+                        items[3] = new MenuItem("Edit Folder Name");
+                        items[3].Click += OnClickMenuEditName;
 
 
                         musicFileList.ContextMenu = new ContextMenu(items);
@@ -219,7 +221,7 @@ namespace MonoMusicManager
 
         private void SwitchItemGroup(ListViewGroup group, MusicFolder.Folders folder)
         {
-            new Thread(new UpdateWorker(group, folder, this).Update).Start();
+            new Thread(new UpdateWorker(group, folder, null, null, this).UpdateFolder).Start();
         }
 
         private void OnClickMenuAlbum(object sender, EventArgs e)
@@ -241,6 +243,17 @@ namespace MonoMusicManager
             }
         }
 
+        private void OnClickMenuEditName(object sender, EventArgs e)
+        {
+            EditNameDialog dialog = new EditNameDialog(this, FindMusicFile(musicFileList.FocusedItem));
+            dialog.Show();
+        }
+
+        public void OnOverrideFolders(MusicFile currentFile, bool overrideParent, string parentText, bool overrideAlbum, string albumText)
+        {
+            new Thread(new UpdateWorker(musicFileList.FocusedItem.Group, currentFile.Folder, overrideParent ? parentText : null, overrideAlbum ? albumText : null, this).UpdateParent).Start();
+        }
+        
         internal MusicFile FindMusicFile(ListViewItem item)
         {
             foreach(MusicFile mf in importedFiles)
@@ -251,6 +264,11 @@ namespace MonoMusicManager
                 }
             }
             return null;
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+
         }
     }
 
@@ -328,16 +346,51 @@ namespace MonoMusicManager
     {
         private ListViewGroup viewGroup;
         private MusicFolder.Folders folder;
+        private string AlternateAlbumFolder;
+        private string AlternateParentFolder;
         private MainWindow window;
 
-        internal UpdateWorker(ListViewGroup group, MusicFolder.Folders folder, MainWindow window)
+        internal UpdateWorker(ListViewGroup group, MusicFolder.Folders folder, string AlternateParent, string AlternateAlbum, MainWindow window)
         {
             this.viewGroup = group;
             this.folder = folder;
             this.window = window;
+
+            this.AlternateAlbumFolder = AlternateAlbum;
+            this.AlternateParentFolder = AlternateParent;
         }
 
-        internal void Update()
+        internal void UpdateParent()
+        {
+            List<MusicFile> files = new List<MusicFile>();
+            foreach (ListViewItem item in viewGroup.Items)
+            {
+                MusicFile mf = window.FindMusicFile(item);
+                window.importedFiles.Remove(mf);
+                files.Add(mf);
+            }
+
+            files = MusicFolder.AlterParent(files, AlternateParentFolder != null, AlternateParentFolder, AlternateAlbumFolder != null, AlternateAlbumFolder);
+
+            window.importedFiles.AddRange(files.ToArray());
+
+            window.Invoke((MethodInvoker)delegate
+            {
+                if(files.Count > 0)
+                {
+                    viewGroup.Header = files[0].HasParent() ? "'" + files[0].GetParent() + "' / '" + files[0].CreateFolderName() + "'" : files[0].CreateFolderName();
+                }
+                
+
+                window.musicFileList.Refresh();
+                /*for (int i = 0; i < window.musicFileList.Columns.Count; i++)
+                {
+                    window.musicFileList.AutoResizeColumn(i, i != 0 ? ColumnHeaderAutoResizeStyle.HeaderSize : ColumnHeaderAutoResizeStyle.ColumnContent);
+                }*/
+            });
+        }
+
+        internal void UpdateFolder()
         {
             List<MusicFile> files = new List<MusicFile>();
             foreach (ListViewItem item in viewGroup.Items)
@@ -412,7 +465,7 @@ namespace MonoMusicManager
                     }
                     else
                     {
-                        ListViewGroup group = new ListViewGroup(file.Album.ToLower(), file.HasParent() ? "'" + file.AlbumParentFolder + "' / '" + file.Album + "'" : file.Album);
+                        ListViewGroup group = new ListViewGroup(file.Album.ToLower(), file.HasParent() ? "'" + file.GetParent() + "' / '" + file.CreateFolderName() + "'" : file.CreateFolderName());
                         albumGroups.Add(file.Album, group);
                         item.Group = group;
                     }
