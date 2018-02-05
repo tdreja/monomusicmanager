@@ -307,8 +307,7 @@ namespace MonoMusicManager
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
-            this.Text = "Music Manager V9";
-            this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.Text = "Music Manager V10";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

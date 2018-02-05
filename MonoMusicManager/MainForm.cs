@@ -265,11 +265,6 @@ namespace MonoMusicManager
             }
             return null;
         }
-
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 
     class CopyWorker

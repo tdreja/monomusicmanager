@@ -9,6 +9,9 @@ namespace MonoMusicManager
 {
     public class MusicFile
     {
+        public static Regex pathRegex = new Regex(string.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidFileNameChars()))));
+        public static Regex linuxRegex = new Regex(string.Format("[{0}]", Regex.Escape("\\/:*?\"<>|")));
+
         public string Artist { get; protected set; }
         public string Title { get; protected set; }
         public string Album { get; protected set; }
@@ -161,25 +164,23 @@ namespace MonoMusicManager
 
         public string CreateFolderName()
         {
-            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidFileNameChars())))); 
-
-            if(AlternateAlbumFolder != null && AlternateAlbumFolder.Length > 0)
+            if (AlternateAlbumFolder != null && AlternateAlbumFolder.Length > 0)
             {
-                return r.Replace(AlternateAlbumFolder, "");
+                return linuxRegex.Replace(pathRegex.Replace(AlternateAlbumFolder, ""), "");
             }
             else if (Artist != null)
             {
                 if (Folder == MusicFolder.Folders.LIEDER || Album == null || Album.Length == 0)
                 {
-                    return r.Replace(Artist,"");
+                    return linuxRegex.Replace(pathRegex.Replace(Artist,""), "");
                 }
                 else if (HasVariousArtists)
                 {
-                    return r.Replace(Album, "");
+                    return linuxRegex.Replace(pathRegex.Replace(Album, ""), "");
                 }
                 else
                 {
-                    return r.Replace(Artist + " - " + Album, "");
+                    return linuxRegex.Replace(pathRegex.Replace(Artist + " - " + Album, ""), "");
                 }
             }
             else
@@ -191,15 +192,13 @@ namespace MonoMusicManager
 
         private string CreateFileName(FileInfo sourceFile, bool useTrackNr)
         {
-            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(new string(Path.GetInvalidFileNameChars()))));
-
             if (useTrackNr && TrackNr > 0)
             {
-                return FormatDiscNr() + FormatTrackNr() + " - " + r.Replace(Title, "") + sourceFile.Extension;
+                return FormatDiscNr() + FormatTrackNr() + " - " + linuxRegex.Replace(pathRegex.Replace(Title, ""),"") + sourceFile.Extension;
             }
             else
             {
-                return r.Replace(Title, "") + sourceFile.Extension;
+                return linuxRegex.Replace(pathRegex.Replace(Title, ""),"") + sourceFile.Extension;
             }
         }
 
