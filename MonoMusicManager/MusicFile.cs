@@ -281,7 +281,7 @@ namespace MonoMusicManager
                 case Folders.LIEDER:
                     return "Lieder";
                 case Folders.FILMMUSIK:
-                    return "Filmmusik";
+                    return "Soundtracks";
                 case Folders.PLAYLISTS:
                     return "Playlists";
                 case Folders.PODCASTS:
