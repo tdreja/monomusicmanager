@@ -95,7 +95,7 @@ namespace MonoMusicManager
             return FormatDiscNr() + FormatTrackNr() + " - " + Artist + " - " + Title + " (from '" + Album + "', Genre: " + Genre + ") File: " + Source + " Sorted into: "+MusicFolder.GetFolderName(Folder);
         }
 
-        public string CopyToDestination(string targetFolder, bool overide)
+        public string CopyToDestination(string targetFolder, bool overrideFile)
         {
             if(CanCopy())
             {
@@ -107,7 +107,10 @@ namespace MonoMusicManager
 
                 if(!Source.Equals(dest.FullName))
                 {
-                    File.Copy(Source, dest.FullName, overide);
+                    if(!File.Exists(dest.FullName) || overrideFile)
+                    {
+                        File.Copy(Source, dest.FullName, overrideFile);
+                    }
                 }
 
                 return dest.FullName;
