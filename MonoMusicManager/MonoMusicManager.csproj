@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MonoMusicManager</RootNamespace>
     <AssemblyName>MonoMusicManager</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -89,12 +89,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlbumInfo.cs" />
     <Compile Include="EditNameDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EditNameDialog.Designer.cs">
       <DependentUpon>EditNameDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="MusicFolder.cs" />
     <Compile Include="Playlist.cs" />
     <Compile Include="MusicFile.cs" />
     <Compile Include="MainForm.cs">
