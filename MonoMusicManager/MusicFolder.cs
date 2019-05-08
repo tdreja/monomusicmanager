@@ -188,7 +188,7 @@ namespace MonoMusicManager
             // Group in albums and check how many songs are in each album
             foreach(MusicFile file in unsortedFiles)
             {
-                if(file.Album != null)
+                if(file.IsValid() && file.Album != null)
                 {
                     if(albumInfos.ContainsKey(file.Album))
                     {

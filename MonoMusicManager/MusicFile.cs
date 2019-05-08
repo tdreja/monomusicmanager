@@ -128,6 +128,16 @@ namespace MonoMusicManager
                 DiscNr = file.Tag.Disc;
                 BiteRate = file.Properties.AudioBitrate;
                 Duration = file.Properties.Duration;
+
+                if(Artist == null)
+                {
+                    if(file.Tag.FirstAlbumArtist != null)
+                    {
+                        Artist = file.Tag.FirstAlbumArtist;
+                        file.Tag.Performers = file.Tag.AlbumArtists;
+                        file.Save();
+                    }                    
+                }
             }
             else
             {
@@ -397,9 +407,5 @@ namespace MonoMusicManager
             return Album;
         }
     }
-
-#region Folder & AlbumInfo
-
-    #endregion
 
 }
