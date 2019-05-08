@@ -141,6 +141,7 @@ namespace MonoMusicManager
             this.musicFileList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.musicFileList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.musicFileList.GridLines = true;
+            this.musicFileList.HideSelection = false;
             this.musicFileList.HoverSelection = true;
             this.musicFileList.LabelEdit = true;
             this.musicFileList.Location = new System.Drawing.Point(3, 93);
@@ -307,7 +308,7 @@ namespace MonoMusicManager
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
-            this.Text = "Music Manager V10";
+            this.Text = "Music Manager V15";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

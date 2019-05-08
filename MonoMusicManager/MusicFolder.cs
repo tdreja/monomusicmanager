@@ -63,7 +63,7 @@ namespace MonoMusicManager
                 case Folders.PLAYLISTS:
                     return "Playlists";
                 case Folders.PODCASTS:
-                    return "Podcasts";
+                    return "Podcasts - Hörbücher";
                 default:
                     return "NoFolder";
             }
